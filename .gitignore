@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+# Node
+node_modules/
+*.log
+# Go
+bin/
+*.test
+# Python
+__pycache__/
+*.pyc
+# Env
+.env
+# Containers
+dist/
