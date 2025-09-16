@@ -72,7 +72,19 @@ func jobsHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
+	// NEW: filter by company query param
+	company := r.URL.Query().Get("company")
+	if company != "" {
+		filtered := []Job{}
+		for _, job := range jobs {
+			if job.Company == company {
+				filtered = append(filtered, job)
+			}
+		}
+		jobs = filtered
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(jobs) // ignoring error for now (we'll handle later)
+	_ = json.NewEncoder(w).Encode(jobs)
 }
