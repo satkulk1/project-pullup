@@ -4,22 +4,27 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os" // NEW: to read environment variables
+	"os"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
-	mux := http.NewServeMux()
+	// Build router
+	r := chi.NewRouter()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// Route: GET /
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Hello, PullUp!")
 	})
 
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	// Route: GET /health
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, "ok")
 	})
 
-	// NEW: read PORT from env, default to 8080
+	// PORT from env with default
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -27,8 +32,7 @@ func main() {
 	addr := ":" + port
 
 	log.Printf("▶ listening on http://localhost%s ...", addr)
-
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	if err := http.ListenAndServe(addr, r); err != nil {
 		log.Fatal(err)
 	}
 }
