@@ -6,19 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-
+	
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/cors"
 )
-
-// Job describes the shape we return as JSON
-type Job struct {
-	ID       string `json:"id"`
-	Company  string `json:"company"`
-	Title    string `json:"title"`
-	URL      string `json:"url"`
-	Location string `json:"location,omitempty"`
-}
 
 func main() {
 	r := chi.NewRouter()
@@ -59,20 +50,8 @@ func main() {
 
 // jobsHandler writes a JSON array of jobs to the response
 func jobsHandler(w http.ResponseWriter, r *http.Request) {
-	jobs := []Job{
-		{
-			ID: "stripe-se2-remote", Company: "Stripe",
-			Title: "Software Engineer II", URL: "https://careers.example.com/stripe/se2",
-			Location: "Remote (US)",
-		},
-		{
-			ID: "spotify-be-sf", Company: "Spotify",
-			Title: "Backend Engineer", URL: "https://careers.example.com/spotify/be",
-			Location: "San Francisco, CA",
-		},
-	}
+	jobs := sampleJobs() // NEW: fetch from helper function
 
-	// NEW: filter by company query param
 	company := r.URL.Query().Get("company")
 	if company != "" {
 		filtered := []Job{}
