@@ -2,4 +2,7 @@ module github.com/satkulk1/project-pullup/apps/gateway-api
 
 go 1.25.1
 
-require github.com/go-chi/chi/v5 v5.2.3 // indirect
+require (
+	github.com/go-chi/chi/v5 v5.2.3 // indirect
+	github.com/rs/cors v1.11.1 // indirect
+)

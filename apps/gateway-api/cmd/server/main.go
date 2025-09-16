@@ -7,18 +7,25 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/rs/cors"
 )
 
 func main() {
-	// Build router
 	r := chi.NewRouter()
 
-	// Route: GET /
+	// CORS: allow your local React dev server
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"}, // frontend dev origin
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
+	r.Use(c.Handler)
+
+	// Routes
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Hello, PullUp!")
 	})
-
-	// Route: GET /health
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, "ok")
